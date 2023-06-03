@@ -11,14 +11,23 @@ import {
   AxesHelper,
   CylinderGeometry,
   SphereGeometry,
+  TextureLoader,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 
-const boxGeometry = new BoxGeometry(1, 1, 1);
-const sphereGeometry = new SphereGeometry(0.5, 15, 15);
-const cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1);
-const geometries = [boxGeometry, cylinderGeometry, sphereGeometry];
+const textureLoader = new TextureLoader();
+const materials = [
+  new MeshBasicMaterial({ map: textureLoader.load('/fire.jpg') }),
+  new MeshBasicMaterial({ map: textureLoader.load('/earth.jpg') }),
+  new MeshBasicMaterial({ map: textureLoader.load('/water.jpg') }),
+]
+
+const geometries = [
+  new BoxGeometry(1, 1, 1),
+  new CylinderGeometry(0.5, 0.5, 1),
+  new CylinderGeometry(0.5, 0.5, 1),
+];
 
 const gui = new GUI();
 
@@ -68,7 +77,7 @@ const parameters = {
         for (let z = 0; z < scaleZ; z++) {
           const newFigure = new Mesh(
             geometries[Math.floor(Math.random() * geometries.length)],
-            new MeshBasicMaterial()
+            materials[Math.floor(Math.random() * materials.length)],
           );
           newFigure.position.set(
             x - (scaleX - 1) / 2,
