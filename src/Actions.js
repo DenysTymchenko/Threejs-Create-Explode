@@ -18,10 +18,15 @@ const geometries = [
 ];
 
 export const actions = {
-  // Generates random figures inside of cube
   Generate: () => {
-    const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
+    //If figures already exists, delete them from scene and from figures array
+    if (figures.length > 0) {
+      figures.forEach(figure => scene.remove(figure)); //removing figure from scene})
+      figures.length = 0; //empty the array
+    };
 
+    const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
+    // Generates random figures inside of cube
     for (let x = 0; x < scaleX; x++) {
       for (let y = 0; y < scaleY; y++) {
         for (let z = 0; z < scaleZ; z++) {
@@ -60,5 +65,5 @@ export const actions = {
         }
       )
     )
-  }
+  },
 }
