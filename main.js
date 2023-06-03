@@ -9,6 +9,7 @@ import {
   WebGLRenderer,
   LineSegments,
 } from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Sizes
 const sizes = {
@@ -40,6 +41,16 @@ scene.add(camera);
 const renderer = new WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
 renderer.render(scene, camera);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
+function animate() {
+  requestAnimationFrame( animate );
+  controls.update();
+  renderer.render( scene, camera );
+}
+animate();
 
 window.addEventListener('resize', () => {
   sizes.width = window.innerWidth;
