@@ -1,5 +1,12 @@
 import { cube, scene } from './Scene.js';
-import { BoxGeometry, CylinderGeometry, Mesh, MeshBasicMaterial, TextureLoader } from 'three';
+import {
+  BoxGeometry,
+  SphereGeometry,
+  CylinderGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  TextureLoader
+} from 'three';
 import { gsap } from 'gsap';
 
 const figures = []; // all created meshes will be contained here, for explode animation
@@ -13,7 +20,7 @@ const materials = [
 
 const geometries = [
   new BoxGeometry(1, 1, 1),
-  new CylinderGeometry(0.5, 0.5, 1),
+  new SphereGeometry(0.5, 15, 15),
   new CylinderGeometry(0.5, 0.5, 1),
 ];
 
