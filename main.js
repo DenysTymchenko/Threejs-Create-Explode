@@ -10,6 +10,9 @@ import {
   LineSegments,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import GUI from 'lil-gui';
+
+const gui = new GUI();
 
 // Sizes
 const sizes = {
@@ -24,12 +27,36 @@ const canvas = document.querySelector('.webgl');
 const scene = new Scene();
 
 // Cube
-const edges = new EdgesGeometry(new BoxGeometry(4, 4, 4));
+const edges = new EdgesGeometry(new BoxGeometry(1, 1, 1));
 const cube = new LineSegments(
   edges,
   new LineBasicMaterial(),
 );
 scene.add(cube);
+gui
+  .add(cube.scale, 'x')
+  .min(-10)
+  .max(10)
+  .step(1);
+gui
+  .add(cube.scale, 'y')
+  .min(-10)
+  .max(10)
+  .step(1);
+gui
+  .add(cube.scale, 'z')
+  .min(-10)
+  .max(10)
+  .step(1);
+
+const parameters = {
+  Generate: () => {},
+  Explode: () => {},
+}
+gui
+  .add(parameters, 'Generate');
+gui
+  .add(parameters, 'Explode');
 
 // Camera
 const camera = new PerspectiveCamera(75, sizes.width / sizes.height);
@@ -46,10 +73,11 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
 function animate() {
-  requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
   controls.update();
-  renderer.render( scene, camera );
+  renderer.render(scene, camera);
 }
+
 animate();
 
 window.addEventListener('resize', () => {
