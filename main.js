@@ -2,9 +2,12 @@ import {
   Scene,
   Mesh,
   BoxGeometry,
+  EdgesGeometry,
   MeshBasicMaterial,
+  LineBasicMaterial,
   PerspectiveCamera,
   WebGLRenderer,
+  LineSegments,
 } from 'three';
 
 // Sizes
@@ -20,9 +23,10 @@ const canvas = document.querySelector('.webgl');
 const scene = new Scene();
 
 // Cube
-const cube = new Mesh(
-  new BoxGeometry(4, 4, 4),
-  new MeshBasicMaterial({ wireframe: true })
+const edges = new EdgesGeometry(new BoxGeometry(4, 4, 4));
+const cube = new LineSegments(
+  edges,
+  new LineBasicMaterial(),
 );
 scene.add(cube);
 
