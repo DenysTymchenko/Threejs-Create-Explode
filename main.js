@@ -15,6 +15,9 @@ import {
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import { gsap } from 'gsap';
+
+const figures = [];
 
 const textureLoader = new TextureLoader();
 const materials = [
@@ -69,7 +72,6 @@ gui
 //Generate, Explode
 const parameters = {
   Generate: () => {
-    console.log(cube.scale)
     const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
 
     for (let x = 0; x < scaleX; x++) {
@@ -84,14 +86,37 @@ const parameters = {
             y - (scaleY - 1) / 2,
             z - (scaleZ - 1) / 2
           );
+          figures.push(newFigure);
           scene.add(newFigure);
         }
       }
     }
   },
+
   Explode: () => {
-  },
+    const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
+
+    const deleteFigures = () => {
+      figures.splice(0, figures.length);
+    }
+
+    figures.forEach(figure =>
+      gsap.to(figure.position,
+        {
+          duration: 2,
+          x: Math.random() * (scaleX - (-scaleX)) + (-scaleX),
+          y: Math.random() * (scaleY - (-scaleY)) + (-scaleY),
+          z: Math.random() * (scaleZ - (-scaleZ)) + (-scaleZ),
+          onComplete: () => {
+            scene.remove(figure)
+            deleteFigures();
+          }
+        }
+      )
+    )
+  }
 }
+
 gui
   .add(parameters, 'Generate');
 gui
