@@ -8,6 +8,7 @@ import {
   PerspectiveCamera,
   WebGLRenderer,
   LineSegments,
+  AxesHelper,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
@@ -26,6 +27,9 @@ const canvas = document.querySelector('.webgl');
 // Scene
 const scene = new Scene();
 
+const axesHelper = new AxesHelper( 5 );
+scene.add( axesHelper );
+
 // Cube
 const edges = new EdgesGeometry(new BoxGeometry(1, 1, 1));
 const cube = new LineSegments(
@@ -35,22 +39,43 @@ const cube = new LineSegments(
 scene.add(cube);
 gui
   .add(cube.scale, 'x')
-  .min(-10)
+  .min(1)
   .max(10)
   .step(1);
 gui
   .add(cube.scale, 'y')
-  .min(-10)
+  .min(1)
   .max(10)
   .step(1);
 gui
   .add(cube.scale, 'z')
-  .min(-10)
+  .min(1)
   .max(10)
   .step(1);
 
+//Generate, Explode
 const parameters = {
-  Generate: () => {},
+  Generate: () => {
+    console.log(cube.scale)
+    const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
+
+    for (let x = 0; x < scaleX; x++) {
+      for (let y = 0; y < scaleY; y++) {
+        for (let z = 0; z < scaleZ; z++) {
+          const newFigure = new Mesh(
+            new BoxGeometry(1, 1, 1),
+            new MeshBasicMaterial()
+          );
+          newFigure.position.set(
+            x - (scaleX - 1) / 2,
+            y - (scaleY - 1) / 2,
+            z - (scaleZ - 1) / 2
+          );
+          scene.add(newFigure);
+        }
+      }
+    }
+  },
   Explode: () => {},
 }
 gui
