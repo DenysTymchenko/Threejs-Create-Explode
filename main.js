@@ -9,9 +9,16 @@ import {
   WebGLRenderer,
   LineSegments,
   AxesHelper,
+  CylinderGeometry,
+  SphereGeometry,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+
+const boxGeometry = new BoxGeometry(1, 1, 1);
+const sphereGeometry = new SphereGeometry(0.5, 15, 15);
+const cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1);
+const geometries = [boxGeometry, cylinderGeometry, sphereGeometry];
 
 const gui = new GUI();
 
@@ -27,8 +34,8 @@ const canvas = document.querySelector('.webgl');
 // Scene
 const scene = new Scene();
 
-const axesHelper = new AxesHelper( 5 );
-scene.add( axesHelper );
+const axesHelper = new AxesHelper(5);
+scene.add(axesHelper);
 
 // Cube
 const edges = new EdgesGeometry(new BoxGeometry(1, 1, 1));
@@ -40,17 +47,14 @@ scene.add(cube);
 gui
   .add(cube.scale, 'x')
   .min(1)
-  .max(10)
   .step(1);
 gui
   .add(cube.scale, 'y')
   .min(1)
-  .max(10)
   .step(1);
 gui
   .add(cube.scale, 'z')
   .min(1)
-  .max(10)
   .step(1);
 
 //Generate, Explode
@@ -63,7 +67,7 @@ const parameters = {
       for (let y = 0; y < scaleY; y++) {
         for (let z = 0; z < scaleZ; z++) {
           const newFigure = new Mesh(
-            new BoxGeometry(1, 1, 1),
+            geometries[Math.floor(Math.random() * geometries.length)],
             new MeshBasicMaterial()
           );
           newFigure.position.set(
@@ -76,7 +80,8 @@ const parameters = {
       }
     }
   },
-  Explode: () => {},
+  Explode: () => {
+  },
 }
 gui
   .add(parameters, 'Generate');
