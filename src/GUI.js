@@ -19,8 +19,19 @@ gui
   .min(1)
   .step(1);
 
-//Generate/Explode buttons
+//Actions buttons
 gui
   .add(actions, 'Generate');
 gui
-  .add(actions, 'Explode');
+  .add(actions, 'Explode')
+  .onChange(() => { // if Explode pressed
+    gui.controllers[4].show(false); // it's becomes invisible
+    gui.controllers[5].show(true); // and Assemble becomes visible
+  })
+gui
+  .add(actions, 'Assemble')
+  .show(false)
+  .onChange(() => { // if Explode pressed
+    gui.controllers[4].show(true); // Explode becomes visible
+    gui.controllers[5].show(false); // and Assemble becomes invisible
+  })

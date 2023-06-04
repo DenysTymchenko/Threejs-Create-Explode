@@ -28,7 +28,7 @@ export const actions = {
   Generate: () => {
     //If figures already exists, delete them from scene and from figures array
     if (figures.length > 0) {
-      figures.forEach(figure => scene.remove(figure)); //removing figure from scene})
+      figures.forEach(figure => scene.remove(figure.mesh)); //removing figure from scene})
       figures.length = 0; //empty the array
     };
 
@@ -42,12 +42,20 @@ export const actions = {
             geometries[Math.floor(Math.random() * geometries.length)],
             materials[Math.floor(Math.random() * materials.length)],
           );
+          // setting the position of the figure relative to the cube
           figure.position.set(
-            x - (scaleX - 1) / 2,
+            x - (scaleX - 1) / 2, // (scaleX - 1) / 2 represents half the size of the cube in this axes.
             y - (scaleY - 1) / 2,
             z - (scaleZ - 1) / 2
           );
-          figures.push(figure); //pushing new figures to our figures array
+
+          figures.push({
+            mesh: figure,
+            x: figure.position.x,
+            y: figure.position.y,
+            z: figure.position.z,
+          }); // pushing new figure to our figures array
+
           scene.add(figure);
         }
       }
@@ -59,18 +67,26 @@ export const actions = {
     const { x: scaleX, y: scaleY, z: scaleZ } = cube.scale;
 
     figures.forEach(figure =>
-      gsap.to(figure.position,
+      gsap.to(figure.mesh.position,
         {
           duration: 2,
           x: Math.random() * (scaleX - (-scaleX)) + (-scaleX),
           y: Math.random() * (scaleY - (-scaleY)) + (-scaleY),
           z: Math.random() * (scaleZ - (-scaleZ)) + (-scaleZ),
-          onComplete: () => {
-            scene.remove(figure) //removing figure from scene
-            figures.splice(figures[figures.indexOf(figure)], 1); //removing figure from array
-          }
         }
       )
     )
+  },
+
+  // Set figures position to its original state
+  Assemble: () => {
+    figures.forEach(figure =>
+      gsap.to(figure.mesh.position, {
+        duration: 2,
+        x: figure.x,
+        y: figure.y,
+        z: figure.z,
+      })
+    );
   },
 }
